@@ -5,8 +5,8 @@ const userSchema = new mongoose.Schema({
     email: {type:String, unique:true, required:true},
     mobileNumber: String,
     password: {type:String, required:true},
-    role: {type:String, enum:('admin', 'doctor', 'patient')},
-    specialization: {type:String,enum:('nerves', 'heart', 'lungs', 'skin') },
+    role: {type:String, enum:['admin', 'doctor', 'patient'], default:'patient'},
+    specialization: {type:String,enum:['nerves', 'heart', 'lungs', 'skin'] },
     availableDays: {type:String, enum: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
 });
 
