@@ -3,13 +3,14 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const userModel = require('../models/user.model');
 const saltRound = Number(process.env.SALTROUND);
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const authMiddleware = require('../middlewares/auth');
 const jwtSecretKey = process.env.SECRETKEY;
 
 
 const userRoute = express.Router();
 
-userRoute.post('/signup', async (req, res) => {
+userRoute.post('/auth/register', async (req, res) => {
     try {
         //console.log(req.body.password);
         let emailComingFromBody = req.body.email;
@@ -38,7 +39,7 @@ userRoute.post('/signup', async (req, res) => {
     }
 });
 
-userRoute.post('/login', async (req, res) => {
+userRoute.post('/auth/login', async (req, res) => {
     try {
         let rawPassword = req.body.password;
         console.log(req.body.password);
@@ -71,4 +72,15 @@ userRoute.post('/login', async (req, res) => {
         console.log(err);
     }
 });
+
+userRoute.get('/admin/users', authMiddleware('admin'), async (req, res) => {
+    try {
+        let users = await userModel.find();
+        return res.status(200).json({ msg: 'List of all Users', users });
+    } catch (err) {
+        res.status(400).json({ msg: 'UnAuthorised' });
+        console.log(err);
+    }
+
+})
 module.exports = userRoute;

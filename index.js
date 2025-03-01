@@ -2,12 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const connectToDb = require('./config/mongo.config');
 const userRoute = require('./routes/user.routes');
+const appointmentRoute = require('./routes/appointment.routes');
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/users', userRoute)
+app.use('/users', userRoute);
+
+app.use('/appointments', appointmentRoute);
 
 app.get('/', (req, res) => {
     res.send('This is a test route');
