@@ -84,14 +84,26 @@ userRoute.get('/admin/users', authMiddleware('admin'), async (req, res) => {
 
 });
 
-userRoute.get('/admin/users/:id', authMiddleware('admin'), async(req,res)=>{
+userRoute.get('/admin/users/:id', authMiddleware('admin'), async (req, res) => {
     try {
         let userId = req.params.id;
         //console.log(userId);
-        let user = await userModel.findOne({_id:userId});
+        let user = await userModel.findOne({ _id: userId });
         return res.status(200).json({ msg: 'User', user });
     } catch (err) {
         res.status(400).json({ msg: 'UnAuthorised' });
+        console.log(err);
+    }
+});
+
+userRoute.delete('/admin/users/:id', authMiddleware('admin'), async (req, res) => {
+    try {
+        let userId = req.params.id;
+        //console.log(userId);
+        let user = await userModel.findByIdAndDelete({ _id: userId });
+        return res.status(200).json({ msg: 'User Deleted', user});
+    } catch (err) {
+        res.status(400).json({ msg: 'Something went wrong' });
         console.log(err);
     }
 });
